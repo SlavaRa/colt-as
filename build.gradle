@@ -1,0 +1,20 @@
+group 'codeOrchestra.colt'
+apply plugin: 'idea'
+dependencies {
+    compile fileTree(dir: "${project(":colt-core").projectDir.path}/lib", include: '*.jar')
+    compile project(':colt-core')
+}
+jar {
+    baseName = 'colt-as'
+    exclude "codeOrchestra/colt/as/cli/ColtCLI**"
+}
+task cliJar(type:Jar, dependsOn: compileGroovy) {
+    baseName = 'colt-cli'
+    manifest {
+        attributes 'Main-Class': "codeOrchestra.colt.as.cli.ColtCLI"
+    }
+    from("$project.buildDir/classes/main/") {
+        include "codeOrchestra/colt/as/cli/ColtCLI**"
+    }
+}
+assemble.dependsOn cliJar
